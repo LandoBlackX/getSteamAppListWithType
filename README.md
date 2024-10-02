@@ -1,1 +1,1 @@
-# getSteamAppLIstWithType
+# getSteamAppListWithType
