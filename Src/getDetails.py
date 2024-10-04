@@ -42,7 +42,6 @@ def check(appid, results, cursor, conn):
     except requests.exceptions.RequestException as e:
         print(f"appid: {appid}的HTTP请求失败，错误: {e}")
         write_results_to_file(results)
-        sys.exit(1)  # 结束程序
     except ValueError as e:
         print(f"appid: {appid}的JSON解析失败，错误: {e}")
 
