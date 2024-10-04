@@ -2,7 +2,7 @@ name: 更新
 on:
   workflow_dispatch:
   schedule:
-     - cron:  '0 9,17 * * *'
+     - cron:  '0 * * * *'
 env:
   TZ: Asia/Shanghai
   CI: false
