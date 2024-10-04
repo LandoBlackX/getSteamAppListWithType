@@ -63,7 +63,7 @@ rows = cursor.fetchall()
 
 results = {}
 
-for row in rows[:200]:
+for row in rows[:199]:
     appid = row[0]
     check(appid, results, cursor, conn)
 
