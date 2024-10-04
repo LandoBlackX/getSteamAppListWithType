@@ -1,11 +1,10 @@
 import json
 import os
 import sqlite3
-import warnings
-from pathlib import Path
-
 import requests
+from pathlib import Path
 from urllib3.exceptions import InsecureRequestWarning
+import warnings
 
 warnings.simplefilter('ignore', InsecureRequestWarning)
 
@@ -13,13 +12,7 @@ db_path = Path(os.path.dirname(os.path.dirname(__file__))) / 'data' / 'app_list.
 getDetails_URL = "https://store.steampowered.com/api/appdetails?l=english&appids="
 output_file = Path(os.path.dirname(os.path.dirname(__file__))) / 'data' / 'output.json'
 
-
-def update_status(cursor, appid):
-    cursor.execute("UPDATE apps SET status = true WHERE appid = ?", (appid,))
-
-
 def write_results_to_file(results):
-    conn.commit()
     if output_file.exists():
         with open(output_file, 'r', encoding='utf-8') as f:
             existing_results = json.load(f)
@@ -31,6 +24,9 @@ def write_results_to_file(results):
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(existing_results, f, ensure_ascii=False, indent=4)
 
+def update_status(cursor, appid):
+    cursor.execute("UPDATE apps SET status = true WHERE appid = ?", (appid,))
+    conn.commit()
 
 def check(appid, results, cursor, conn):
     url = f"{getDetails_URL}{appid}"
@@ -53,20 +49,17 @@ def check(appid, results, cursor, conn):
     except ValueError as e:
         print(f"appid: {appid}的JSON解析失败，错误: {e}")
 
-
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
-cursor.execute("SELECT appid FROM apps WHERE status = false")
-
-rows = cursor.fetchall()
-
+rows = cursor.execute("SELECT appid FROM apps WHERE status = false").fetchall()
 results = {}
 
-for row in rows[:190]:
+for row in rows[:200]:
     appid = row[0]
     check(appid, results, cursor, conn)
 
-conn.close()
-
 write_results_to_file(results)
+
+cursor.close()
+conn.close()
