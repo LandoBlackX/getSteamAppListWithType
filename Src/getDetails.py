@@ -1,7 +1,6 @@
 import json
 import os
 import sqlite3
-import sys
 import warnings
 from pathlib import Path
 
@@ -17,12 +16,20 @@ output_file = Path(os.path.dirname(os.path.dirname(__file__))) / 'data' / 'outpu
 
 def update_status(cursor, appid):
     cursor.execute("UPDATE apps SET status = true WHERE appid = ?", (appid,))
-    conn.commit()
 
 
 def write_results_to_file(results):
+    conn.commit()
+    if output_file.exists():
+        with open(output_file, 'r', encoding='utf-8') as f:
+            existing_results = json.load(f)
+    else:
+        existing_results = {}
+
+    existing_results.update(results)
+
     with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(results, f, ensure_ascii=False, indent=4)
+        json.dump(existing_results, f, ensure_ascii=False, indent=4)
 
 
 def check(appid, results, cursor, conn):
@@ -42,6 +49,7 @@ def check(appid, results, cursor, conn):
     except requests.exceptions.RequestException as e:
         print(f"appid: {appid}的HTTP请求失败，错误: {e}")
         write_results_to_file(results)
+        exit(0)
     except ValueError as e:
         print(f"appid: {appid}的JSON解析失败，错误: {e}")
 
