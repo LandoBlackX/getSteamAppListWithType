@@ -9,7 +9,7 @@ const agent = new https.Agent({
 });
 
 const octokit = new Octokit({
-  auth: 'secrets.TOKEN',
+  auth: process.env.TOKEN,
   request: {
     agent: agent,
   },
