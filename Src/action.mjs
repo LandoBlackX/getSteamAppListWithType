@@ -1,6 +1,5 @@
 import { Octokit } from '@octokit/core';
 import https from 'https';
-import secrets from '../config/secrets';
 
 // 设置全局环境变量
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
