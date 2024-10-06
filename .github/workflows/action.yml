@@ -11,5 +11,7 @@ jobs:
         run: |
           npm install @octokit/core
       - name: 更新
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
         run: node Src/action.mjs
         
