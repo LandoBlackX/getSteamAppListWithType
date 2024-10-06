@@ -12,4 +12,4 @@ jobs:
           npm install @octokit/core
       - name: 更新
         run: node Src/action.mjs
-        TOKEN: ${{ secrets.TOKEN }}
+        
