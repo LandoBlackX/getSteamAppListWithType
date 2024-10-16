@@ -15,7 +15,7 @@ jobs:
       - name: Update applist
         run: python Src/getAppList.py
       - name: Update data
-        run: python Src/getDetails.py && python Src/trans.py
+        run: python Src/getDetails.py && python Src/db2json.py
         
       - uses: EndBug/add-and-commit@v9
         with:
